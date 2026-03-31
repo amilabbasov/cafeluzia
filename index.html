@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cafe Luzia — Where Coffee Meets Comfort</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --espresso: #2C1810;
+    --roast:    #4A2C1A;
+    --caramel:  #C17F45;
+    --cream:    #F5EDD8;
+    --latte:    #E8D5B0;
+    --milk:     #FAF6EE;
+    --smoke:    #8B7355;
+    --gold:     #D4A853;
+    --sage:     #7A8C6E;
+    --text:     #1E1108;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--milk);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: .4;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 0 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px;
+    background: rgba(250,246,238,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(193,127,69,.15);
+    transition: box-shadow .3s;
+  }
+  nav.scrolled { box-shadow: 0 4px 32px rgba(44,24,16,.08); }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--roast);
+    letter-spacing: .04em;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .nav-logo span { color: var(--caramel); font-style: italic; }
+
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-size: .85rem;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    position: relative;
+    transition: color .25s;
+    cursor: pointer;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -3px; left: 0; width: 0; height: 1px;
+    background: var(--caramel);
+    transition: width .3s;
+  }
+  .nav-links a:hover { color: var(--roast); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    background: var(--roast); color: var(--cream) !important;
+    padding: .5rem 1.4rem;
+    border-radius: 2px;
+    letter-spacing: .1em !important;
+    transition: background .25s !important;
+  }
+  .nav-cta:hover { background: var(--caramel) !important; }
+  .nav-cta::after { display: none !important; }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 1.5px; background: var(--roast); transition: .3s; }
+
+  /* ── PAGES ── */
+  .page { display: none; padding-top: 72px; }
+  .page.active { display: block; }
+
+  /* ══════════════════════════
+     HOME PAGE
+  ══════════════════════════ */
+
+  /* Hero */
+  .hero {
+    position: relative;
+    height: calc(100vh - 72px);
+    min-height: 560px;
+    overflow: hidden;
+    display: flex; align-items: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1600&q=80') center/cover no-repeat;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(120deg, rgba(44,24,16,.72) 0%, rgba(44,24,16,.28) 60%, transparent 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 10vw;
+    max-width: 700px;
+    animation: heroFade .9s ease forwards;
+  }
+  @keyframes heroFade {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow {
+    font-size: .8rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    font-weight: 500;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.08;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero p {
+    color: rgba(245,237,216,.75);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 440px;
+    margin-bottom: 2.5rem;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: var(--caramel);
+    color: var(--milk);
+    padding: .85rem 2rem;
+    font-size: .85rem;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border: none; cursor: pointer;
+    text-decoration: none;
+    transition: background .25s, transform .2s;
+    border-radius: 2px;
+  }
+  .btn-primary:hover { background: var(--roast); transform: translateY(-2px); }
+
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: .6rem;
+    border: 1px solid rgba(245,237,216,.5);
+    color: var(--cream);
+    padding: .85rem 2rem;
+    font-size: .85rem;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    background: transparent; cursor: pointer;
+    text-decoration: none;
+    transition: all .25s;
+    border-radius: 2px;
+  }
+  .btn-outline:hover { background: rgba(255,255,255,.12); border-color: var(--cream); }
+
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: .5rem;
+    color: rgba(245,237,216,.5); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50%      { transform: translateX(-50%) translateY(6px); }
+  }
+  .hero-scroll::after {
+    content: '';
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, rgba(245,237,216,.4), transparent);
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    background: var(--roast);
+    display: grid; grid-template-columns: repeat(3,1fr);
+    text-align: center;
+  }
+  .stat-item {
+    padding: 2rem 1rem;
+    border-right: 1px solid rgba(255,255,255,.08);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: .75rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(245,237,216,.5);
+    margin-top: .4rem;
+  }
+
+  /* Section shared */
+  .section { padding: 7rem 5vw; }
+  .section-tag {
+    font-size: .75rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--caramel);
+    font-weight: 500;
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .section-tag::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--caramel);
+    display: inline-block;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--roast);
+    margin-bottom: 1rem;
+  }
+  .section-title em { font-style: italic; color: var(--caramel); }
+  .section-sub {
+    color: var(--smoke);
+    line-height: 1.75;
+    font-size: .95rem;
+    max-width: 520px;
+  }
+
+  /* Featured */
+  .featured { background: var(--milk); }
+  .featured-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .featured-header .section-tag {
+    justify-content: center;
+  }
+  .featured-header .section-tag::before { display: none; }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .product-card {
+    background: var(--cream);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .3s, box-shadow .3s;
+    position: relative;
+  }
+  .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(44,24,16,.12); }
+  .product-card-img {
+    width: 100%; aspect-ratio: 4/3;
+    object-fit: cover;
+    display: block;
+    transition: transform .5s;
+  }
+  .product-card:hover .product-card-img { transform: scale(1.06); }
+  .product-card-body { padding: 1.5rem; }
+  .product-card-category {
+    font-size: .7rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--caramel);
+    margin-bottom: .5rem;
+  }
+  .product-card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--roast);
+    margin-bottom: .4rem;
+  }
+  .product-card-desc {
+    font-size: .85rem;
+    color: var(--smoke);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  .product-card-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: var(--caramel);
+    font-weight: 600;
+  }
+  .product-badge {
+    position: absolute; top: 1rem; right: 1rem;
+    background: var(--roast);
+    color: var(--cream);
+    font-size: .65rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: .3rem .8rem;
+    border-radius: 2px;
+  }
+
+  /* About split */
+  .about-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .about-img-wrap {
+    position: relative;
+  }
+  .about-img-main {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  .about-img-float {
+    position: absolute;
+    bottom: -2.5rem;
+    right: -2.5rem;
+    width: 55%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 6px solid var(--milk);
+    box-shadow: 0 12px 40px rgba(44,24,16,.15);
+  }
+  .about-text { padding-right: 2rem; }
+  .about-text .section-title { margin-bottom: 1.5rem; }
+  .about-text p {
+    color: var(--smoke);
+    font-size: .95rem;
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+  }
+  .about-signature {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--caramel);
+    margin-top: 2rem;
+  }
+
+  /* Testimonials */
+  .testimonials { background: var(--roast); }
+  .testimonials .section-tag { color: var(--gold); }
+  .testimonials .section-tag::before { background: var(--gold); }
+  .testimonials .section-title { color: var(--cream); }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+    max-width: 1200px;
+  }
+  .testimonial-card {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 4px;
+    padding: 2rem;
+    transition: background .3s;
+  }
+  .testimonial-card:hover { background: rgba(255,255,255,.09); }
+  .stars { color: var(--gold); font-size: 1rem; letter-spacing: .1em; margin-bottom: 1rem; }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: rgba(245,237,216,.85);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .testimonial-author {
+    display: flex; align-items: center; gap: .8rem;
+  }
+  .author-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--caramel);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: var(--cream);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .author-name {
+    font-size: .85rem;
+    font-weight: 500;
+    color: var(--latte);
+  }
+  .author-meta {
+    font-size: .72rem;
+    color: rgba(245,237,216,.4);
+    margin-top: .15rem;
+  }
+
+  /* Gallery */
+  .gallery { background: var(--cream); }
+  .gallery-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 2.5rem;
+    max-width: 1200px;
+    margin-left: auto; margin-right: auto;
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: 220px 220px;
+    gap: .8rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .gallery-grid .g1 { grid-column: 1/3; grid-row: 1/3; }
+  .gallery-grid .g2 { grid-column: 3; grid-row: 1; }
+  .gallery-grid .g3 { grid-column: 4; grid-row: 1; }
+  .gallery-grid .g4 { grid-column: 3/5; grid-row: 2; }
+  .gallery-item {
+    overflow: hidden;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform .6s cubic-bezier(.25,.46,.45,.94);
+    display: block;
+  }
+  .gallery-item:hover img { transform: scale(1.08); }
+  .gallery-overlay {
+    position: absolute; inset: 0;
+    background: rgba(44,24,16,0);
+    display: flex; align-items: center; justify-content: center;
+    transition: background .3s;
+  }
+  .gallery-item:hover .gallery-overlay { background: rgba(44,24,16,.25); }
+  .gallery-icon {
+    color: white; font-size: 1.5rem; opacity: 0;
+    transition: opacity .3s;
+  }
+  .gallery-item:hover .gallery-icon { opacity: 1; }
+
+  /* ══════════════════════════
+     MENU PAGE
+  ══════════════════════════ */
+  .menu-hero {
+    background: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1400&q=80') center/cover no-repeat;
+    height: 340px;
+    display: flex; align-items: flex-end;
+    padding: 3rem 10vw;
+    position: relative;
+  }
+  .menu-hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(44,24,16,.8) 0%, transparent 60%);
+  }
+  .menu-hero-content { position: relative; z-index: 2; }
+  .menu-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem,5vw,4rem);
+    font-weight: 300;
+    color: var(--cream);
+  }
+  .menu-hero p { color: var(--latte); font-size: .9rem; margin-top: .5rem; opacity: .8; }
+
+  .menu-body { padding: 4rem 5vw; max-width: 1200px; margin: 0 auto; }
+  .menu-filters {
+    display: flex; gap: .75rem; flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .filter-btn {
+    padding: .55rem 1.4rem;
+    border: 1px solid var(--latte);
+    background: transparent;
+    color: var(--smoke);
+    font-size: .8rem;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all .25s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--roast);
+    border-color: var(--roast);
+    color: var(--cream);
+  }
+
+  .menu-category-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--roast);
+    margin-bottom: 1.5rem;
+    padding-bottom: .75rem;
+    border-bottom: 1px solid var(--latte);
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .menu-category-title::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: linear-gradient(to right, var(--latte), transparent);
+  }
+
+  .menu-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+  .menu-item {
+    display: flex; gap: 1.2rem;
+    background: var(--cream);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: box-shadow .3s;
+  }
+  .menu-item:hover { box-shadow: 0 8px 32px rgba(44,24,16,.1); }
+  .menu-item-img {
+    width: 100px; height: 100px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .menu-item-info {
+    padding: 1rem 1rem 1rem 0;
+    flex: 1;
+  }
+  .menu-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--roast);
+    margin-bottom: .25rem;
+  }
+  .menu-item-desc {
+    font-size: .8rem;
+    color: var(--smoke);
+    line-height: 1.5;
+    margin-bottom: .5rem;
+  }
+  .menu-item-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    color: var(--caramel);
+    font-weight: 600;
+  }
+
+  /* ══════════════════════════
+     ABOUT PAGE
+  ══════════════════════════ */
+  .about-page-hero {
+    background: url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1400&q=80') center/cover no-repeat;
+    height: 480px;
+    display: flex; align-items: center;
+    padding: 0 10vw;
+    position: relative;
+  }
+  .about-page-hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, rgba(44,24,16,.75) 0%, transparent 70%);
+  }
+  .about-page-hero-content { position: relative; z-index: 2; max-width: 540px; }
+  .about-page-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem,5vw,4rem);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .about-page-hero p { color: var(--latte); opacity: .8; line-height: 1.7; }
+
+  .about-story {
+    padding: 7rem 5vw;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+  .story-text p {
+    color: var(--smoke);
+    line-height: 1.85;
+    font-size: .95rem;
+    margin-bottom: 1.2rem;
+  }
+  .values-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    padding: 0 5vw 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .value-card {
+    background: var(--cream);
+    padding: 2rem;
+    border-radius: 4px;
+    border-left: 3px solid var(--caramel);
+  }
+  .value-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .value-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--roast);
+    margin-bottom: .5rem;
+  }
+  .value-text { font-size: .875rem; color: var(--smoke); line-height: 1.6; }
+
+  .interior-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 320px;
+    overflow: hidden;
+  }
+  .interior-strip img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .6s;
+  }
+  .interior-strip div { overflow: hidden; }
+  .interior-strip div:hover img { transform: scale(1.08); }
+
+  /* ══════════════════════════
+     CONTACT PAGE
+  ══════════════════════════ */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    min-height: calc(100vh - 72px);
+  }
+  .contact-info {
+    background: var(--roast);
+    padding: 5rem 4vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .contact-info .section-tag { color: var(--gold); }
+  .contact-info .section-tag::before { background: var(--gold); }
+  .contact-info .section-title { color: var(--cream); margin-bottom: 2.5rem; }
+
+  .contact-details { display: flex; flex-direction: column; gap: 2rem; }
+  .contact-detail {
+    display: flex; gap: 1.2rem; align-items: flex-start;
+  }
+  .detail-icon {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,.08);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    color: var(--gold);
+  }
+  .detail-title {
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(245,237,216,.4);
+    margin-bottom: .3rem;
+  }
+  .detail-value {
+    color: var(--latte);
+    font-size: .9rem;
+    line-height: 1.5;
+  }
+
+  .hours-table { margin-top: 3rem; }
+  .hours-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--cream);
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+  .hours-row {
+    display: flex; justify-content: space-between;
+    padding: .55rem 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    font-size: .875rem;
+  }
+  .hours-day { color: rgba(245,237,216,.5); }
+  .hours-time { color: var(--latte); }
+  .hours-row.today { background: rgba(193,127,69,.12); margin: 0 -.5rem; padding: .55rem .5rem; border-bottom-color: rgba(193,127,69,.2); }
+  .hours-row.today .hours-day, .hours-row.today .hours-time { color: var(--gold); }
+
+  .contact-form-wrap {
+    padding: 5rem 4vw;
+    display: flex; flex-direction: column; justify-content: center;
+    background: var(--milk);
+  }
+  .contact-form-wrap .section-title { margin-bottom: .75rem; }
+  .contact-form-wrap .section-sub { margin-bottom: 2.5rem; }
+
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label {
+    display: block;
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    margin-bottom: .5rem;
+    font-weight: 500;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: .85rem 1rem;
+    border: 1px solid var(--latte);
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9rem;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color .25s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--caramel); }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .form-submit {
+    margin-top: .5rem;
+    width: 100%;
+    background: var(--roast);
+    color: var(--cream);
+    padding: 1rem;
+    font-size: .85rem;
+    font-weight: 500;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background .25s;
+  }
+  .form-submit:hover { background: var(--caramel); }
+
+  .map-embed {
+    width: 100%; height: 280px;
+    border: none;
+    border-radius: 4px;
+    margin-top: 2.5rem;
+    filter: sepia(.2) contrast(.9);
+  }
+
+  .form-success {
+    display: none;
+    background: rgba(122,140,110,.1);
+    border: 1px solid var(--sage);
+    border-radius: 4px;
+    padding: 1rem 1.5rem;
+    color: var(--sage);
+    font-size: .9rem;
+    margin-top: 1rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--espresso);
+    padding: 5rem 5vw 2rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 4rem;
+  }
+  .footer-brand .nav-logo { display: block; margin-bottom: 1rem; font-size: 1.5rem; color: var(--cream); cursor: default; }
+  .footer-tagline { color: rgba(245,237,216,.35); font-size: .85rem; line-height: 1.6; max-width: 260px; }
+  .footer-socials { display: flex; gap: .75rem; margin-top: 1.5rem; }
+  .social-btn {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,.06);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(245,237,216,.5);
+    text-decoration: none;
+    font-size: .85rem;
+    transition: all .25s;
+    cursor: pointer;
+  }
+  .social-btn:hover { background: var(--caramel); color: white; }
+  .footer-col-title {
+    font-size: .7rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(245,237,216,.35);
+    margin-bottom: 1.2rem;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: .65rem; }
+  .footer-links a {
+    color: rgba(245,237,216,.55);
+    text-decoration: none;
+    font-size: .85rem;
+    transition: color .25s;
+    cursor: pointer;
+  }
+  .footer-links a:hover { color: var(--caramel); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,.06);
+    padding-top: 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-copy { color: rgba(245,237,216,.25); font-size: .78rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .about-split { grid-template-columns: 1fr; gap: 3rem; }
+    .about-img-float { display: none; }
+    .about-text { padding-right: 0; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+    }
+    .gallery-grid .g1,
+    .gallery-grid .g4 { grid-column: auto; grid-row: auto; }
+    .about-story { grid-template-columns: 1fr; gap: 2rem; }
+    .values-grid { grid-template-columns: 1fr; }
+    .interior-strip { grid-template-columns: 1fr; height: auto; }
+    .interior-strip div { height: 220px; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 72px; left: 0; right: 0;
+      background: var(--milk);
+      padding: 1.5rem 5vw;
+      border-bottom: 1px solid var(--latte);
+      gap: 1.2rem;
+    }
+    .stats-bar { grid-template-columns: 1fr; }
+    .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .gallery-grid { display: flex; flex-direction: column; }
+    .gallery-item { height: 200px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  /* Fade in on scroll */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .65s ease, transform .65s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <span class="nav-logo" onclick="goTo('home')">Cafe <span>Luzia</span></span>
+  <ul class="nav-links" id="navLinks">
+    <li><a onclick="goTo('home')">Home</a></li>
+    <li><a onclick="goTo('menu')">Menu</a></li>
+    <li><a onclick="goTo('about')">Our Story</a></li>
+    <li><a onclick="goTo('contact')" class="nav-cta">Visit Us</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="page-home" class="page active">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Est. 2008 · Cham, Switzerland</p>
+      <h1>Where Coffee<br>Meets <em>Comfort</em></h1>
+      <p>A warm refuge in the heart of Cham. Handcrafted espresso, homemade gelato, and freshly baked treats — served with genuine warmth.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="goTo('menu')">
+          ☕ View Menu
+        </button>
+        <button class="btn-outline" onclick="goTo('contact')">
+          Find Us
+        </button>
+      </div>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num">15+</div>
+      <div class="stat-label">Years of service</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">40+</div>
+      <div class="stat-label">Gelato flavours</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">★ 4.6</div>
+      <div class="stat-label">Google rating</div>
+    </div>
+  </div>
+
+  <!-- Featured products -->
+  <section class="section featured">
+    <div class="featured-header fade-up">
+      <p class="section-tag">On the menu</p>
+      <h2 class="section-title">Crafted with <em>love</em></h2>
+      <p class="section-sub" style="margin:0 auto">From our single-origin espresso to our legendary amaretto gelato — every bite is made to make you stay a little longer.</p>
+    </div>
+    <div class="products-grid">
+      <div class="product-card fade-up">
+        <div style="overflow:hidden">
+          <img class="product-card-img" src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80" alt="Espresso"/>
+        </div>
+        <div class="product-card-body">
+          <p class="product-card-category">Coffee</p>
+          <h3 class="product-card-name">House Espresso</h3>
+          <p class="product-card-desc">Dark-roasted single origin beans, velvety crema, served with a glass of sparkling water.</p>
+          <span class="product-card-price">CHF 3.90</span>
+        </div>
+        <span class="product-badge">Signature</span>
+      </div>
+      <div class="product-card fade-up">
+        <div style="overflow:hidden">
+          <img class="product-card-img" src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&q=80" alt="Gelato"/>
+        </div>
+        <div class="product-card-body">
+          <p class="product-card-category">Gelato</p>
+          <h3 class="product-card-name">Amaretto Gelato</h3>
+          <p class="product-card-desc">Smooth, creamy, with a whisper of almond liqueur. Our most-requested flavour since day one.</p>
+          <span class="product-card-price">CHF 4.50</span>
+        </div>
+        <span class="product-badge">Fan favourite</span>
+      </div>
+      <div class="product-card fade-up">
+        <div style="overflow:hidden">
+          <img class="product-card-img" src="https://images.unsplash.com/photo-1528736235302-52922df5c122?w=600&q=80" alt="Sandwich"/>
+        </div>
+        <div class="product-card-body">
+          <p class="product-card-category">Breakfast</p>
+          <h3 class="product-card-name">Warm Homemade Sandwich</h3>
+          <p class="product-card-desc">Freshly prepared from 9 am — crusty bread, seasonal fillings, baked warm to order.</p>
+          <span class="product-card-price">CHF 8.90</span>
+        </div>
+        <span class="product-badge">New</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- About teaser -->
+  <section class="section" style="background:var(--cream)">
+    <div class="about-split">
+      <div class="about-img-wrap fade-up">
+        <img class="about-img-main" src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=800&q=80" alt="Cafe interior"/>
+        <img class="about-img-float" src="https://images.unsplash.com/photo-1514481538271-cf9f99627ab4?w=400&q=80" alt="Coffee close-up"/>
+      </div>
+      <div class="about-text fade-up">
+        <p class="section-tag">Our story</p>
+        <h2 class="section-title">The real heart<br>of <em>Cham</em></h2>
+        <p>Cafe Luzia has been the neighbourhood's favourite gathering spot since 2008. What started as a simple ice cream parlour grew into a full café — a place where everyone is welcomed with a smile, regulars feel like family, and the coffee is always perfect.</p>
+        <p>Our owner, lovingly called "Grandma" by loyal guests, pours her heart into every cup and every sandwich. The warm bread rolls you didn't order but always receive? That's just how we do things here.</p>
+        <button class="btn-primary" onclick="goTo('about')" style="margin-top:2rem">Read our story</button>
+        <div class="about-signature">Luzia ♡</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section testimonials">
+    <p class="section-tag">Guest voices</p>
+    <h2 class="section-title">What our <em>guests</em> say</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"The lady who served us providing lovely service and was very nice. She even gave us free bread rolls — such a warm and genuine place."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">J</div>
+          <div>
+            <div class="author-name">Jaide Yellen</div>
+            <div class="author-meta">Google Review · 3 years ago</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"This place is Hemingway's 'clean well-lighted place' in Cham. Good Coffee, Friendly Service, and Italian-style gelato. Highly recommended!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">R</div>
+          <div>
+            <div class="author-name">Richard Sidler</div>
+            <div class="author-meta">Local Guide · 10 years ago</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Amazing coffee! Service was very friendly and fast. Nice seating outside. A real gem of a café in the centre of town."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">B</div>
+          <div>
+            <div class="author-name">Barry C</div>
+            <div class="author-meta">Local Guide · 4 years ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="section gallery">
+    <div class="gallery-header fade-up">
+      <div>
+        <p class="section-tag">Instagram</p>
+        <h2 class="section-title">Life at <em>Luzia</em></h2>
+      </div>
+      <a href="#" style="font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;color:var(--caramel);text-decoration:none;font-weight:500">@cafe.luzia →</a>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item g1">
+        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80" alt="Coffee"/>
+        <div class="gallery-overlay"><span class="gallery-icon">♥️</span></div>
+      </div>
+      <div class="gallery-item g2">
+        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&q=80" alt="Interior"/>
+        <div class="gallery-overlay"><span class="gallery-icon">♥️</span></div>
+      </div>
+      <div class="gallery-item g3">
+        <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?w=600&q=80" alt="Dessert"/>
+        <div class="gallery-overlay"><span class="gallery-icon">♥️</span></div>
+      </div>
+      <div class="gallery-item g4">
+        <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=900&q=80" alt="Cafe table"/>
+        <div class="gallery-overlay"><span class="gallery-icon">♥️</span></div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- end home -->
+
+<!-- ══════════ MENU ══════════ -->
+<div id="page-menu" class="page">
+  <div class="menu-hero">
+    <div class="menu-hero-content">
+      <h1>Our Menu</h1>
+      <p>Crafted daily with seasonal ingredients & a whole lot of love</p>
+    </div>
+  </div>
+
+  <div class="menu-body">
+    <div class="menu-filters" id="menuFilters">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="coffee">Coffee</button>
+      <button class="filter-btn" data-cat="gelato">Gelato</button>
+      <button class="filter-btn" data-cat="breakfast">Breakfast</button>
+      <button class="filter-btn" data-cat="drinks">Drinks</button>
+    </div>
+
+    <div id="menuContent"></div>
+  </div>
+</div><!-- end menu -->
+
+<!-- ══════════ ABOUT ══════════ -->
+<div id="page-about" class="page">
+  <div class="about-page-hero">
+    <div class="about-page-hero-content">
+      <h1>More than a café —<br>a <em>meeting place</em></h1>
+      <p>Since 2008 we have been the warm, welcoming heart of Cham. Here is our story.</p>
+    </div>
+  </div>
+
+  <div class="about-story">
+    <div class="story-text fade-up">
+      <p class="section-tag">Our origins</p>
+      <h2 class="section-title">From ice cream <em>parlour</em><br>to neighbourhood soul</h2>
+      <p>Cafe Luzia opened its doors in 2008 as a small gelateria on the central square of Cham. From the very first day, the owner — Luzia herself — believed that a great cafe is about more than food. It is about the feeling of being welcome.</p>
+      <p>Over the years the menu expanded, the terrace grew, and loyal regulars became lifelong friends. But the soul stayed exactly the same: honest ingredients, handmade with care, served with a genuine smile.</p>
+      <p>Today Luzia is known throughout the region for her legendary gelato, her artisan espresso, and the free bread rolls that appear on your table before you even ask.</p>
+    </div>
+    <div class="fade-up">
+      <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=700&q=80" alt="Cafe interior" style="width:100%;border-radius:4px;display:block"/>
+    </div>
+  </div>
+
+  <div class="values-grid">
+    <div class="value-card fade-up">
+      <div class="value-icon">☕</div>
+      <div class="value-title">Quality First</div>
+      <p class="value-text">Every espresso starts with freshly ground, single-origin beans sourced from trusted roasters. We never compromise on the cup.</p>
+    </div>
+    <div class="value-card fade-up">
+      <div class="value-icon">🤝</div>
+      <div class="value-title">Genuine Warmth</div>
+      <p class="value-text">Our regulars call us family. Whether you speak German, English, or neither, you will always feel at home within moments of arrival.</p>
+    </div>
+    <div class="value-card fade-up">
+      <div class="value-icon">🌿</div>
+      <div class="value-title">Made from Scratch</div>
+      <p class="value-text">Our sandwiches, pastries and gelati are prepared fresh every morning. No shortcuts, no reheated convenience — just honest homemade food.</p>
+    </div>
+    <div class="value-card fade-up">
+      <div class="value-icon">🏡</div>
+      <div class="value-title">Community Hub</div>
+      <p class="value-text">Students come to study, friends come to catch up, freelancers come to focus. Luzia is the town living room — always open, always cosy.</p>
+    </div>
+  </div>
+
+  <div class="interior-strip">
+    <div><img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80" alt="Cafe"/></div>
+    <div><img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=800&q=80" alt="Cafe interior"/></div>
+    <div><img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=800&q=80" alt="Cafe table"/></div>
+  </div>
+
+</div><!-- end about -->
+
+<!-- ══════════ CONTACT ══════════ -->
+<div id="page-contact" class="page">
+  <div class="contact-grid">
+
+    <div class="contact-info">
+      <p class="section-tag">Find us</p>
+      <h2 class="section-title">Come say <em>hello</em></h2>
+      <div class="contact-details">
+        <div class="contact-detail">
+          <div class="detail-icon">📍</div>
+          <div>
+            <div class="detail-title">Address</div>
+            <div class="detail-value">Hauptstrasse 12<br>6330 Cham, Switzerland</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="detail-icon">📞</div>
+          <div>
+            <div class="detail-title">Phone</div>
+            <div class="detail-value">+41 41 780 XX XX</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="detail-icon">✉️</div>
+          <div>
+            <div class="detail-title">Email</div>
+            <div class="detail-value">hello@cafeluzia.ch</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hours-table">
+        <div class="hours-title">Opening Hours</div>
+        <div class="hours-row"><span class="hours-day">Monday</span><span class="hours-time">07:30 – 18:00</span></div>
+        <div class="hours-row"><span class="hours-day">Tuesday</span><span class="hours-time">07:30 – 18:00</span></div>
+        <div class="hours-row today"><span class="hours-day">Wednesday ←</span><span class="hours-time">07:30 – 18:00</span></div>
+        <div class="hours-row"><span class="hours-day">Thursday</span><span class="hours-time">07:30 – 18:00</span></div>
+        <div class="hours-row"><span class="hours-day">Friday</span><span class="hours-time">07:30 – 20:00</span></div>
+        <div class="hours-row"><span class="hours-day">Saturday</span><span class="hours-time">08:00 – 19:00</span></div>
+        <div class="hours-row"><span class="hours-day">Sunday</span><span class="hours-time">09:00 – 17:00</span></div>
+      </div>
+    </div>
+
+    <div class="contact-form-wrap">
+      <p class="section-tag">Get in touch</p>
+      <h2 class="section-title">Send us a <em>message</em></h2>
+      <p class="section-sub">Have a question, a reservation request, or just want to say hi? We'd love to hear from you.</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First name</label>
+          <input type="text" id="fname" placeholder="Maria"/>
+        </div>
+        <div class="form-group">
+          <label>Last name</label>
+          <input type="text" id="lname" placeholder="Müller"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" id="femail" placeholder="maria@example.com"/>
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text" id="fsubject" placeholder="Table reservation, event inquiry…"/>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="fmessage" placeholder="Tell us more…"></textarea>
+      </div>
+      <button class="form-submit" onclick="submitForm()">Send message →</button>
+      <div class="form-success" id="formSuccess">
+        ✓ Thank you! We'll get back to you within 24 hours.
+      </div>
+
+      <iframe
+        class="map-embed"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2719.8!2d8.4623!3d47.1823!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479aa5c1c9ebabb5%3A0x3e8e5f59e0a32c0f!2sCham%2C+Switzerland!5e0!3m2!1sen!2sus!4v1"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+
+  </div>
+</div><!-- end contact -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="nav-logo">Cafe <span>Luzia</span></span>
+      <p class="footer-tagline">Where every cup carries warmth and every guest leaves with a smile. The heart of Cham since 2008.</p>
+      <div class="footer-socials">
+        <a class="social-btn" title="Instagram">📷</a>
+        <a class="social-btn" title="Facebook">f</a>
+        <a class="social-btn" title="TripAdvisor">🦉</a>
+        <a class="social-btn" title="Google">G</a>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Navigate</p>
+      <ul class="footer-links">
+        <li><a onclick="goTo('home')">Home</a></li>
+        <li><a onclick="goTo('menu')">Menu</a></li>
+        <li><a onclick="goTo('about')">Our Story</a></li>
+        <li><a onclick="goTo('contact')">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Menu</p>
+      <ul class="footer-links">
+        <li><a>Coffee & Espresso</a></li>
+        <li><a>Artisan Gelato</a></li>
+        <li><a>Breakfast & Brunch</a></li>
+        <li><a>Seasonal Drinks</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Hours</p>
+      <ul class="footer-links" style="gap:.4rem">
+        <li><a style="color:rgba(245,237,216,.3);cursor:default">Mon–Fri · 07:30–18:00</a></li>
+        <li><a style="color:rgba(245,237,216,.3);cursor:default">Friday · 07:30–20:00</a></li>
+        <li><a style="color:rgba(245,237,216,.3);cursor:default">Saturday · 08:00–19:00</a></li>
+        <li><a style="color:rgba(245,237,216,.3);cursor:default">Sunday · 09:00–17:00</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">©️ 2025 Cafe Luzia · Cham, Switzerland · All rights reserved</p>
+    <p class="footer-copy">Made with ♡ and good espresso</p>
+  </div>
+</footer>
+
+<script>
+// ── DATA ──
+const menuData = {
+  coffee: {
+    label: 'Coffee',
+    items: [
+      { name:'House Espresso', desc:'Single-origin dark roast, velvet crema', price:'CHF 3.90', img:'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=300&q=75' },
+      { name:'Flat White', desc:'Double ristretto with silky microfoam', price:'CHF 5.20', img:'https://images.unsplash.com/photo-1534778101976-62847782c213?w=300&q=75' },
+      { name:'Cappuccino', desc:'Classic Italian ratio, dusted with cocoa', price:'CHF 4.80', img:'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=300&q=75' },
+      { name:'Cold Brew', desc:'12-hour cold extraction, smooth & bold', price:'CHF 6.50', img:'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=300&q=75' },
+    ]
+  },
+  gelato: {
+    label: 'Gelato',
+    items: [
+      { name:'Amaretto', desc:'Almond liqueur — the Luzia classic', price:'CHF 4.50', img:'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&q=75' },
+      { name:'Lemon Mango', desc:'Tangy sorbet swirl, refreshing & light', price:'CHF 4.50', img:'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=300&q=75' },
+      { name:'Vanilla Coffee', desc:'Madagascar vanilla kissed with espresso', price:'CHF 4.50', img:'https://images.unsplash.com/photo-1560008581-09826d1de69e?w=300&q=75' },
+      { name:'Dark Chocolate', desc:'70% Belgian cocoa, intensely smooth', price:'CHF 4.50', img:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=300&q=75' },
+    ]
+  },
+  breakfast: {
+    label: 'Breakfast',
+    items: [
+      { name:'Warm Homemade Sandwich', desc:'Baked to order from 9 am — seasonal fillings', price:'CHF 8.90', img:'https://images.unsplash.com/photo-1528736235302-52922df5c122?w=300&q=75' },
+      { name:'Avocado Toast', desc:'Sourdough, smashed avo, chilli flakes', price:'CHF 11.50', img:'https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=300&q=75' },
+      { name:'Croissant au Beurre', desc:'Flaky, buttery, freshly baked daily', price:'CHF 4.20', img:'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=300&q=75' },
+      { name:'Granola Bowl', desc:'House granola, Greek yoghurt, seasonal fruit', price:'CHF 9.50', img:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&q=75' },
+    ]
+  },
+  drinks: {
+    label: 'Drinks & More',
+    items: [
+      { name:'Fresh Lemonade', desc:'Squeezed to order, lemon & mint', price:'CHF 5.50', img:'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=300&q=75' },
+      { name:'Matcha Latte', desc:'Ceremonial grade matcha, oat milk', price:'CHF 6.20', img:'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=300&q=75' },
+      { name:'Swiss Hot Chocolate', desc:'Rich, dark, with a dollop of cream', price:'CHF 5.80', img:'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=300&q=75' },
+      { name:'Sparkling Water', desc:'Local Swiss spring water, chilled', price:'CHF 3.50', img:'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&q=75' },
+    ]
+  }
+};
+
+function renderMenu(filter) {
+  const container = document.getElementById('menuContent');
+  container.innerHTML = '';
+  Object.entries(menuData).forEach(([key, cat]) => {
+    if (filter !== 'all' && filter !== key) return;
+    const section = document.createElement('div');
+    section.innerHTML = `
+      <h3 class="menu-category-title">${cat.label}</h3>
+      <div class="menu-items-grid">
+        ${cat.items.map(item => `
+          <div class="menu-item">
+            <img class="menu-item-img" src="${item.img}" alt="${item.name}" loading="lazy"/>
+            <div class="menu-item-info">
+              <div class="menu-item-name">${item.name}</div>
+              <div class="menu-item-desc">${item.desc}</div>
+              <div class="menu-item-price">${item.price}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(section);
+  });
+}
+
+// ── NAVIGATION ──
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+  if (page === 'menu') renderMenu('all');
+  setTimeout(observeFadeUps, 100);
+  // close mobile menu
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+// ── NAVBAR SCROLL ──
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// ── MENU FILTERS ──
+document.addEventListener('click', e => {
+  if (e.target.matches('.filter-btn')) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    renderMenu(e.target.dataset.cat);
+    setTimeout(observeFadeUps, 50);
+  }
+});
+
+// ── FORM ──
+function submitForm() {
+  const fields = ['fname','lname','femail','fmessage'];
+  const empty = fields.some(id => !document.getElementById(id).value.trim());
+  if (empty) { alert('Please fill in all required fields.'); return; }
+  document.getElementById('formSuccess').style.display = 'block';
+  fields.forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fsubject').value = '';
+  setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 5000);
+}
+
+// ── INTERSECTION OBSERVER for fade-up ──
+function observeFadeUps() {
+  const els = document.querySelectorAll('.fade-up:not(.visible)');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('visible'));
+    return;
+  }
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(el => obs.observe(el));
+}
+
+// ── INIT ──
+observeFadeUps();
+</script>
+</body>
+</html>
