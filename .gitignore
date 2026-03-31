@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Logs
+logs
+*.log
+
+# Build
+/dist
+/build
+
+# Environment
+.env
+.env.*
